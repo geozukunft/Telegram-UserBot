@@ -39,7 +39,7 @@ async def upstream(ups):
     if not ups.text[0].isalpha() and ups.text[0] not in ("/", "#", "@", "!"):
         await ups.edit("`Checking for updates, please wait....`")
         conf = ups.pattern_match.group(1)
-        off_repo = 'https://github.com/RaphielGang/Telegram-UserBot.git'
+        off_repo = 'https://github.com/geozukunft/Telegram-UserBot.git'
 
         try:
             txt = "`Oops.. Updater cannot continue due to "
