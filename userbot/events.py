@@ -95,7 +95,7 @@ def errors_handler(func):
             await errors.client.send_file(
                 -1001238475554,
                 "error.log",
-                caption=text,
+                caption=text55,
             )
             return
 
