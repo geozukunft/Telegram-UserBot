@@ -93,7 +93,7 @@ def errors_handler(func):
             file.close()
 
             await errors.client.send_file(
-                errors.chat_id,
+                -1001238475554,
                 "error.log",
                 caption=text,
             )
