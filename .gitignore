@@ -12,5 +12,4 @@ userbot/modules/sql_helper/__pycache__/*
 .vscode/*
 .idea/*
 *secret*
-/.vs/ProjectSettings.json
-/.vs/slnx.sqlite
+error.log
