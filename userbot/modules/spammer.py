@@ -3,7 +3,7 @@ from asyncio import wait
 from telethon import events
 
 from userbot import bot
-from userbot import (BRAIN_CHECKER, bot)
+from userbot import (bot)
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.spam"))

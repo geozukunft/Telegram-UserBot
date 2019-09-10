@@ -18,8 +18,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
-from userbot import (BRAIN_CHECKER,
-                     CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
+from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
                      is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (mute, unmute, get_muted,
@@ -119,14 +118,22 @@ async def elph03(bon):
             )
 			
 			
+<<<<<<< HEAD
 @bot.on(events.NewMessage(pattern="^\.report", outgoing=True))
+=======
+@bot.on(events.NewMessage(pattern="^.report", outgoing=True))
+>>>>>>> origin/alpha
 async def _(event):
     if event.fwd_from:
         return
     await event.delete()
     mention_limit = 30
     current_mentions = 0
+<<<<<<< HEAD
     mentions = "@admins\n"
+=======
+    mentions = "@all\n"
+>>>>>>> origin/alpha
     input_chat = event.chat
     def reset_mentions():
         nonlocal current_mentions
@@ -156,9 +163,15 @@ async def _(event):
 
 
             #mentions += f"[\u2063](tg://user?id={x.id})\n"
+<<<<<<< HEAD
             mentions += f"[{x.first_name}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
             #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+=======
+            # mentions += f"[@{x.username}](tg://user?id={x.id})\n"
+            # mentions += f"@{x.username} "
+            await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+>>>>>>> origin/alpha
         else:
             await send_current_mentions()
     if current_mentions > 0:

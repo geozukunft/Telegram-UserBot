@@ -25,9 +25,10 @@ async def gen_chlog(repo, diff):
 
 
 async def is_off_br(br):
-    off_br = ['master', 'staging', 'redis']
-    if br in off_br:
-        return 1
+    off_br = ['master', 'staging', 'redis','alpha']
+    for k in off_br:
+        if k == br:
+            return 1
     return
 
 
