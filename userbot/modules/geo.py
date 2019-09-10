@@ -18,8 +18,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
-from userbot import (BRAIN_CHECKER,
-                     CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
+from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
                      is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (mute, unmute, get_muted,
