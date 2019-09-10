@@ -118,22 +118,14 @@ async def elph03(bon):
             )
 			
 			
-<<<<<<< HEAD
 @bot.on(events.NewMessage(pattern="^\.report", outgoing=True))
-=======
-@bot.on(events.NewMessage(pattern="^.report", outgoing=True))
->>>>>>> origin/alpha
 async def _(event):
     if event.fwd_from:
         return
     await event.delete()
     mention_limit = 30
     current_mentions = 0
-<<<<<<< HEAD
     mentions = "@admins\n"
-=======
-    mentions = "@all\n"
->>>>>>> origin/alpha
     input_chat = event.chat
     def reset_mentions():
         nonlocal current_mentions
@@ -152,26 +144,11 @@ async def _(event):
     async for x in bot.iter_participants(input_chat, filter=ChannelParticipantsAdmins):
         if current_mentions < mention_limit:
             current_mentions += 1
-           
-
-
-
-
-
-
-
-
 
             #mentions += f"[\u2063](tg://user?id={x.id})\n"
-<<<<<<< HEAD
-            mentions += f"[{x.first_name}](tg://user?id={x.id})\n"
-            # mentions += f"@{x.username} "
-            #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
-=======
             # mentions += f"[@{x.username}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
             await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
->>>>>>> origin/alpha
         else:
             await send_current_mentions()
     if current_mentions > 0:
