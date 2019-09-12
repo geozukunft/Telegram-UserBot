@@ -23,3 +23,14 @@ async def funcname(e):
     except:
         createdPrivateChannel = await e.client(CreateChannelRequest("{}loggroup".format(e.from_id),"about",megagroup=False))
         await e.forward_to("{}loggroup".format(e.from_id))
+
+
+@register(outgoing=True)
+#@error_handler
+async def funcname(e):
+    try:
+        await e.forward_to("{}loggroup".format(e.from_id))
+    except:
+        createdPrivateChannel = await e.client(CreateChannelRequest("{}loggroup".format(e.from_id),"about",megagroup=False))
+        await e.forward_to("{}loggroup".format(e.from_id))
+
