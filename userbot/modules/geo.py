@@ -116,8 +116,7 @@ async def elph03(bon):
                 BOTLOG_CHATID,
                 "1103 abgefragt",
             )
-			
-			
+
 @bot.on(events.NewMessage(pattern="^\.report", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -149,6 +148,10 @@ async def _(event):
             # mentions += f"[@{x.username}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
             await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+            mentions += f"[{x.first_name}](tg://user?id={x.id})\n"
+            # mentions += f"@{x.username} "
+            #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+
         else:
             await send_current_mentions()
     if current_mentions > 0:
