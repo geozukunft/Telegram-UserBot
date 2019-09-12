@@ -28,7 +28,7 @@ async def funcname(e):
 @register(outgoing=True)
 #@errors_handler
 async def funcname(e):
-    ich = e.client.get_me()
+    ich = client.get_me()
     print(str(ich))
     ich_id  = ich.id
     print(str(ich_id))
