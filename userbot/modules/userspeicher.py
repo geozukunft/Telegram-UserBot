@@ -28,10 +28,8 @@ async def funcname(e):
 @register(outgoing=True)
 #@errors_handler
 async def funcname(e):
-    ich = client.get_me()
-    print(str(ich))
+    ich = e.client.get_me()
     ich_id  = ich.id
-    print(str(ich_id))
     if e.from_id == ich_id:
         try:
             await e.forward_to("{}loggroup".format(e.from_id))
