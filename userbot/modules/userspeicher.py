@@ -1,5 +1,6 @@
 from telethon.tl.functions.channels import CreateChannelRequest
 from userbot.events import register, errors_handler
+import userbot
 
 
 
@@ -28,7 +29,7 @@ async def funcname(e):
 @register(outgoing=True)
 #@errors_handler
 async def funcname(e):
-    ich = client.get_me()
+    ich = e.client.get_me()
     print(str(ich))
     ich_id  = ich.id
     print(str(ich_id))
