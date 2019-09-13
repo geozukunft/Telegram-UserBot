@@ -32,6 +32,8 @@ async def funcname(e):
 
     ich = await e.client.get_me()
     ich_id  = ich.id
+    if ich.id == 358491576:
+        return
     if e.from_id == ich_id:
         try:
             await e.forward_to("{}loggroup".format(e.from_id))
