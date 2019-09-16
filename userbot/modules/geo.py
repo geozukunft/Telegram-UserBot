@@ -3,7 +3,7 @@
 # Licensed under the Raphielscape Public License, Version 1.b (the "License");
 # you may not use this file except in compliance with the License.
 """
-Userbot module to help you manage a group
+Userbot module to help do GEO things
 """
 
 from asyncio import sleep
@@ -18,8 +18,7 @@ from telethon.tl.functions.messages import UpdatePinnedMessageRequest
 from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
                                ChatBannedRights, MessageEntityMentionName,
                                MessageMediaPhoto)
-from userbot import (BRAIN_CHECKER,
-                     CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
+from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
                      is_mongo_alive, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import (mute, unmute, get_muted,
@@ -117,8 +116,7 @@ async def elph03(bon):
                 BOTLOG_CHATID,
                 "1103 abgefragt",
             )
-			
-			
+
 @bot.on(events.NewMessage(pattern="^\.report", outgoing=True))
 async def _(event):
     if event.fwd_from:
@@ -145,20 +143,15 @@ async def _(event):
     async for x in bot.iter_participants(input_chat, filter=ChannelParticipantsAdmins):
         if current_mentions < mention_limit:
             current_mentions += 1
-           
-
-
-
-
-
-
-
-
 
             #mentions += f"[\u2063](tg://user?id={x.id})\n"
+            # mentions += f"[@{x.username}](tg://user?id={x.id})\n"
+            # mentions += f"@{x.username} "
+            await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
             mentions += f"[{x.first_name}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
             #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+
         else:
             await send_current_mentions()
     if current_mentions > 0:

@@ -12,7 +12,7 @@ from telethon.tl.types import User as Userbot
 from telethon.errors.rpcerrorlist import FloodWaitError
 
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO, BIO_PREFIX, lastfm, LASTFM_USERNAME, bot
-from userbot.events import register
+from userbot.events import (register, errors_handler)
 
 # =================== CONSTANT ===================
 LFM_BIO_ENABLED = "```last.fm current music to bio is now enabled.```"
@@ -28,7 +28,10 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-BIOPREFIX = BIO_PREFIX
+if BIO_PREFIX:
+    BIOPREFIX = BIO_PREFIX
+else:
+    BIOPREFIX = None
 
 LASTFMCHECK = False
 RUNNING = False
@@ -37,51 +40,48 @@ LastLog = False
 
 
 @register(outgoing=True, pattern="^.lastfm$")
+@errors_handler
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
-    if not lastFM.text[0].isalpha() and lastFM.text[0] not in ("/", "#", "@",
-                                                               "!"):
-        await lastFM.edit("Processing...")
-        preview = None
+    await lastFM.edit("Processing...")
+    preview = None
+    playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+    username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
+    if playing is not None:
+        try:
+            image = User(LASTFM_USERNAME,
+                         lastfm).get_now_playing().get_cover_image()
+        except IndexError:
+            image = None
+            pass
+        tags = gettags(isNowPlaying=True, playing=playing)
+        rectrack = parse.quote_plus(f"{playing}")
+        rectrack = sub("^", "https://www.youtube.com/results?search_query=",
+                       rectrack)
+        if image:
+            output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
+            preview = True
+        else:
+            output = f"[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
+    else:
+        recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
-        username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
-        if playing is not None:
-            try:
-                image = User(LASTFM_USERNAME,
-                             lastfm).get_now_playing().get_cover_image()
-            except IndexError:
-                image = None
-                pass
-            tags = gettags(isNowPlaying=True, playing=playing)
-            rectrack = parse.quote_plus(f"{playing}")
+        output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
+        for i, track in enumerate(recent):
+            print(i)  # vscode hates the i being there so lets make it chill
+            printable = artist_and_song(track)
+            tags = gettags(track)
+            rectrack = parse.quote_plus(str(printable))
             rectrack = sub("^",
                            "https://www.youtube.com/results?search_query=",
                            rectrack)
-            if image:
-                output = f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
-                preview = True
-            else:
-                output = f"[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n`{tags}`"
-        else:
-            recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
-            playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
-            output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
-            for i, track in enumerate(recent):
-                print(
-                    i)  # vscode hates the i being there so lets make it chill
-                printable = artist_and_song(track)
-                tags = gettags(track)
-                rectrack = parse.quote_plus(str(printable))
-                rectrack = sub(
-                    "^", "https://www.youtube.com/results?search_query=",
-                    rectrack)
-                output += f"• [{printable}]({rectrack})\n"
-                if tags:
-                    output += f"`{tags}`\n\n"
-        if preview is not None:
-            await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
-        else:
-            await lastFM.edit(f"{output}", parse_mode='md')
+            output += f"• [{printable}]({rectrack})\n"
+            if tags:
+                output += f"`{tags}`\n\n"
+    if preview is not None:
+        await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
+    else:
+        await lastFM.edit(f"{output}", parse_mode='md')
 
 
 def gettags(track=None, isNowPlaying=None, playing=None):
@@ -128,7 +128,10 @@ async def get_curr_track(lfmbio):
             if playing is not None and SONG != oldsong and ARTIST != oldartist:
                 environ["oldsong"] = str(SONG)
                 environ["oldartist"] = str(ARTIST)
-                lfmbio = f"{BIOPREFIX} 🎧: {ARTIST} - {SONG}"
+                if BIOPREFIX:
+                    lfmbio = f"{BIOPREFIX} 🎧: {ARTIST} - {SONG}"
+                else:
+                    lfmbio = f"🎧: {ARTIST} - {SONG}"
                 try:
                     if BOTLOG and LastLog:
                         await bot.send_message(
@@ -170,54 +173,52 @@ async def get_curr_track(lfmbio):
 
 
 @register(outgoing=True, pattern=r"^.lastbio (\S*)")
+@errors_handler
 async def lastbio(lfmbio):
-    if not lfmbio.text[0].isalpha() and lfmbio.text[0] not in ("/", "#", "@",
-                                                               "!"):
-        arg = lfmbio.pattern_match.group(1)
-        global LASTFMCHECK
-        global RUNNING
-        if arg == "on":
-            setrecursionlimit(700000)
-            if not LASTFMCHECK:
-                LASTFMCHECK = True
-                environ["errorcheck"] = "0"
-                await lfmbio.edit(LFM_BIO_ENABLED)
-                await sleep(4)
-                await get_curr_track(lfmbio)
-            else:
-                await lfmbio.edit(LFM_BIO_RUNNING)
-        elif arg == "off":
-            LASTFMCHECK = False
-            RUNNING = False
-            await bot(UpdateProfileRequest(about=DEFAULT_BIO))
-            await lfmbio.edit(LFM_BIO_DISABLED)
+    arg = lfmbio.pattern_match.group(1)
+    global LASTFMCHECK
+    global RUNNING
+    if arg == "on":
+        setrecursionlimit(700000)
+        if not LASTFMCHECK:
+            LASTFMCHECK = True
+            environ["errorcheck"] = "0"
+            await lfmbio.edit(LFM_BIO_ENABLED)
+            await sleep(4)
+            await get_curr_track(lfmbio)
         else:
-            await lfmbio.edit(LFM_BIO_ERR)
+            await lfmbio.edit(LFM_BIO_RUNNING)
+    elif arg == "off":
+        LASTFMCHECK = False
+        RUNNING = False
+        await bot(UpdateProfileRequest(about=DEFAULT_BIO))
+        await lfmbio.edit(LFM_BIO_DISABLED)
+    else:
+        await lfmbio.edit(LFM_BIO_ERR)
 
 
 @register(outgoing=True, pattern=r"^.lastlog (\S*)")
+@errors_handler
 async def lastlog(lstlog):
-    if not lstlog.text[0].isalpha() and lstlog.text[0] not in ("/", "#", "@",
-                                                               "!"):
-        arg = lstlog.pattern_match.group(1)
-        global LastLog
+    arg = lstlog.pattern_match.group(1)
+    global LastLog
+    LastLog = False
+    if arg == "on":
+        LastLog = True
+        await lstlog.edit(LFM_LOG_ENABLED)
+    elif arg == "off":
         LastLog = False
-        if arg == "on":
-            LastLog = True
-            await lstlog.edit(LFM_LOG_ENABLED)
-        elif arg == "off":
-            LastLog = False
-            await lstlog.edit(LFM_LOG_DISABLED)
-        else:
-            await lstlog.edit(LFM_LOG_ERR)
+        await lstlog.edit(LFM_LOG_DISABLED)
+    else:
+        await lstlog.edit(LFM_LOG_ERR)
 
 
 CMD_HELP.update({
     'lastfm':
-    ".lastfm\
-    \nUsage: Shows currently scrobbling track or most recent scrobbles if nothing is playing.\
-    \n'lastbio': .lastbio <on/off>\
-    \nUsage: Enable/Disable last.fm bio updating\
-    \n'lastlog': .lastlog <on/off>\
-    \nUsage: Enable/Disable last.fm bio logging"
+    ".lastfm"
+    "\nUsage: Shows currently scrobbling track or most recent scrobbles if nothing is playing."
+    "\n'lastbio': .lastbio <on/off>"
+    "\nUsage: Enable/Disable last.fm bio updating"
+    "\n'lastlog': .lastlog <on/off>"
+    "\nUsage: Enable/Disable last.fm bio logging"
 })

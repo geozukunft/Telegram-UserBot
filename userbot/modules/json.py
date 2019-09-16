@@ -13,7 +13,8 @@ from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 
-from userbot import (BRAIN_CHECKER, bot)
+from userbot import (bot)
+
 @bot.on(events.NewMessage(pattern=r"\.json", outgoing=True))
 async def _(event):
     if event.fwd_from:

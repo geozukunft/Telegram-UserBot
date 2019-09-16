@@ -12,12 +12,11 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChannelParticipantsAdmins, Message
 
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WELCOME_MUTE, bot
-from userbot.modules.admin import BANNED_RIGHTS, UNBAN_RIGHTS
+from userbot.modules.admin import KICK_RIGHTS
 from userbot.events import errors_handler
 
 
 @bot.on(ChatAction)
-@errors_handler
 async def welcome_mute(welcm):
     try:
         ''' Ban a recently joined user if it
@@ -92,10 +91,6 @@ async def welcome_mute(welcm):
                     continue  # Check the next messsage
 
             if spambot:
-                await welcm.reply(
-                    "`Potential Spambot Detected! Kicking away! "
-                    "Will log the ID for further purposes!\n"
-                    f"USER:` [{user.first_name}](tg://user?id={user.id})")
 
                 chat = await welcm.get_chat()
                 admin = chat.admin_rights
@@ -107,14 +102,17 @@ async def welcome_mute(welcm):
                         "THIS USER MATCHES MY ALGORITHMS AS A SPAMBOT!`")
                 else:
                     try:
+                        await welcm.reply(
+                            "`Potential Spambot Detected! Kicking away! "
+                            "Will log the ID for further purposes!\n"
+                            f"USER:` [{user.first_name}](tg://user?id={user.id})"
+                        )
+
                         await welcm.client(
                             EditBannedRequest(welcm.chat_id, user.id,
-                                              BANNED_RIGHTS))
+                                              KICK_RIGHTS))
 
                         await sleep(1)
-                        await welcm.client(
-                            EditBannedRequest(welcm.chat_id, user.id,
-                                              UNBAN_RIGHTS))
 
                     except BaseException:
                         await welcm.reply(
@@ -133,7 +131,7 @@ async def welcome_mute(welcm):
 
 CMD_HELP.update({
     'welcome_mute':
-    "If enabled in config.env or env var, \
-        this module will ban(or inform the admins about) the \
-        spammer(s) if they match the userbot's algorithm"
+    "If enabled in config.env or env var, "
+    "this module will ban(or inform the admins about) the "
+    "spammer(s) if they match the userbot's algorithm"
 })

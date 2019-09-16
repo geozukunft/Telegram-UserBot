@@ -2,8 +2,9 @@ from asyncio import wait
 
 from telethon import events
 
+from userbot import BOTLOG_CHATID
 from userbot import bot
-from userbot import (BRAIN_CHECKER, bot)
+from userbot import (bot)
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.spam"))
 @bot.on(events.MessageEdited(outgoing=True, pattern="^.spam"))
@@ -18,7 +19,7 @@ async def spammer(e):
             )
 
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "Spammed successfully")
+        await bot.send_message(BOTLOG_CHATID, "Spammed successfully")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.bigspam"))
@@ -33,7 +34,7 @@ async def bigspam(e):
             await e.respond(spam_message)
 
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "bigspam was successful")
+        await bot.send_message(BOTLOG_CHATID, "bigspam was successful")
 
 
 @bot.on(events.NewMessage(outgoing=True, pattern="^.picspam"))
@@ -47,4 +48,4 @@ async def tiny_pic_spam(e):
         for i in range(1, counter):
             await bot.send_file(e.chat_id, link)
         await e.delete()
-        await bot.send_message(LOGGER_GROUP, "PicSpam was successful")
+        await bot.send_message(BOTLOG_CHATID, "PicSpam was successful")
