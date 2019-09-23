@@ -15,7 +15,6 @@ chatlist = []
 
 
 @register(incoming=True)
-@errors_handler
 async def fischer(handler):
     global chatlist
     if handler.chat_id in chatlist:
@@ -26,7 +25,6 @@ async def fischer(handler):
             
 
 @register(outgoing=True, pattern="^\.startfisch")
-@errors_handler
 async def startfischer(handler):
     global chatlist
     chatlist.append(handler.chat_id)
