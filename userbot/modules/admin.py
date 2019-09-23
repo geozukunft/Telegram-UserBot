@@ -102,7 +102,6 @@ async def set_group_photo(gpic):
 
 
 @register(outgoing=True, pattern="^.promote(?: |$)(.*)")
-@errors_handler
 async def promote(promt):
     """ For .promote command, do promote targeted person """
     # Get targeted chat
@@ -152,7 +151,6 @@ async def promote(promt):
 
 
 @register(outgoing=True, pattern="^.demote(?: |$)(.*)")
-@errors_handler
 async def demote(dmod):
     """ For .demote command, do demote targeted person """
     # Admin right check
@@ -201,7 +199,6 @@ async def demote(dmod):
 
 
 @register(outgoing=True, pattern="^.ban(?: |$)(.*)")
-@errors_handler
 async def ban(bon):
     """ For .ban command, do a ban at targeted person """
     # Here laying the sanity check
@@ -253,7 +250,6 @@ async def ban(bon):
 
 
 @register(outgoing=True, pattern="^.unban(?: |$)(.*)")
-@errors_handler
 async def nothanos(unbon):
     """ For .unban command, unban the target """
     # Here laying the sanity check
@@ -579,7 +575,6 @@ async def get_admin(show):
 
 
 @register(outgoing=True, pattern="^.pin(?: |$)(.*)")
-@errors_handler
 async def pin(msg):
     # Admin or creator check
     chat = await msg.get_chat()
@@ -624,7 +619,6 @@ async def pin(msg):
 
 
 @register(outgoing=True, pattern="^.kick(?: |$)(.*)")
-@errors_handler
 async def kick(usr):
     """ For .kick command, kick someone from the group using the userbot. """
     if not usr.text[0].isalpha() and usr.text[0] not in ("/", "#", "@", "!"):
