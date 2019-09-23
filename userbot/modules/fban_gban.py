@@ -4,15 +4,18 @@
 # you may not use this file except in compliance with the License.
 #
 
-from userbot import bot, CMD_HELP, is_mongo_alive, is_redis_alive
-from userbot.events import register, errors_handler
-from telethon.tl.types import MessageEntityMentionName
-from userbot.modules.dbhelper import get_fban, add_chat_fban, remove_chat_fban, get_gban, add_chat_gban, remove_chat_gban
 import asyncio
+
+from telethon.tl.types import MessageEntityMentionName
+
+from userbot import CMD_HELP, bot, is_mongo_alive, is_redis_alive
+from userbot.events import register
+from userbot.modules.dbhelper import (add_chat_fban, add_chat_gban, get_fban,
+                                      get_gban, remove_chat_fban,
+                                      remove_chat_gban)
 
 
 @register(outgoing=True, pattern="^.gban")
-@errors_handler
 async def gban_all(msg):
     if not is_mongo_alive() or not is_redis_alive():
         await msg.edit("`Database connections failing!`")
@@ -72,7 +75,6 @@ async def gban_all(msg):
 
 
 @register(outgoing=True, pattern="^.fban")
-@errors_handler
 async def fedban_all(msg):
     if not is_mongo_alive() or not is_redis_alive():
         await msg.edit("`Database connections failing!`")
@@ -155,7 +157,6 @@ async def fedban_all(msg):
 
 
 @register(outgoing=True, pattern="^.addfban")
-@errors_handler
 async def add_to_fban(chat):
     if not is_mongo_alive() or not is_redis_alive():
         await chat.edit("`Database connections failing!`")
@@ -165,7 +166,6 @@ async def add_to_fban(chat):
 
 
 @register(outgoing=True, pattern="^.addgban")
-@errors_handler
 async def add_to_gban(chat):
     if not is_mongo_alive() or not is_redis_alive():
         await chat.edit("`Database connections failing!`")
@@ -176,7 +176,6 @@ async def add_to_gban(chat):
 
 
 @register(outgoing=True, pattern="^.removefban")
-@errors_handler
 async def remove_from_fban(chat):
     if not is_mongo_alive() or not is_redis_alive():
         await chat.edit("`Database connections failing!`")
@@ -186,7 +185,6 @@ async def remove_from_fban(chat):
 
 
 @register(outgoing=True, pattern="^.removegban")
-@errors_handler
 async def remove_from_gban(chat):
     if not is_mongo_alive() or not is_redis_alive():
         await chat.edit("`Database connections failing!`")

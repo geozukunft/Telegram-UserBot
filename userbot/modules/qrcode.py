@@ -11,10 +11,10 @@ import os
 from asyncio import sleep
 from datetime import datetime
 
-from requests import post, get
+from requests import get, post
 
 from userbot import CMD_HELP
-from userbot.events import register, errors_handler
+from userbot.events import register
 
 
 def progress(current, total):
@@ -24,7 +24,6 @@ def progress(current, total):
 
 
 @register(pattern=r"^.getqr$", outgoing=True)
-@errors_handler
 async def parseqr(qr_e):
     """ For .getqr command, get QR Code content from the replied photo. """
     if qr_e.fwd_from:
@@ -46,7 +45,6 @@ async def parseqr(qr_e):
 
 
 @register(pattern=r"^.makeqr(?: |$)([\s\S]*)", outgoing=True)
-@errors_handler
 async def make_qr(qrcode):
     """ For .makeqr command, make a QR Code containing the given content. """
     if qrcode.fwd_from:
@@ -98,13 +96,13 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
 
 CMD_HELP.update({
     'getqr':
-    ".getqr"
-    "\nUsage: Get the QR Code content from the replied QR Code."
+    ".getqr\n"
+    "Usage: Get the QR Code content from the replied QR Code."
 })
 
 CMD_HELP.update({
     'makeqr':
-    ".makeqr <content>)"
-    "\nUsage: Make a QR Code from the given content."
-    "\nExample: .makeqr www.google.com"
+    ".makeqr <content>\n"
+    "Usage: Make a QR Code from the given content.\n"
+    "Example: .makeqr www.google.com"
 })

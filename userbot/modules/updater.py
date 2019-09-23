@@ -33,7 +33,6 @@ async def is_off_br(br):
 
 
 @register(outgoing=True, pattern="^.update(?: |$)(.*)")
-@errors_handler
 async def upstream(ups):
     "For .update command, check if the bot is up to date, update if specified"
     await ups.edit("`Checking for updates, please wait....`")
@@ -110,10 +109,7 @@ async def upstream(ups):
 
 CMD_HELP.update({
     'update':
-    '.update'
-    '\nUsage: Check if the main userbot repository has any'
+    '.update\n'
+    'Usage: Check if the main userbot repository has any'
     'updates and show changelog if so.'
-    '\n\n.update now'
-    '\nUsage: Update your userbot, if there are any'
-    'updates in the main userbot repository.'
 })
