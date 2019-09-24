@@ -9,7 +9,7 @@ from asyncio import sleep
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import register, errors_handler
+from userbot.events import register
 
 chatlist = []
 
