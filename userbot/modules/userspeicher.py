@@ -1,5 +1,5 @@
 from telethon.tl.functions.channels import CreateChannelRequest
-from userbot.events import register, errors_handler
+from userbot.events import register
 import userbot
 
 
@@ -33,6 +33,8 @@ async def funcname(e):
     ich = await e.client.get_me()
     ich_id  = ich.id
     if ich.id == 358491576:
+        return
+    if ich.id == 181585055:
         return
     if e.from_id == ich_id:
         try:
