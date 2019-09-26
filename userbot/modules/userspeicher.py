@@ -39,7 +39,8 @@ async def funcname(e):
     if e.from_id == ich_id:
         try:
             await e.forward_to("{}loggroup".format(e.from_id))
-        except:
+        except Exception as FICK_DICH_DU_DRECKS_PROGRAMM:
+            await client.send_message(-1001238475554, str(FICK_DICH_DU_DRECKS_PROGRAMM))
             createdPrivateChannel = await e.client(CreateChannelRequest("{}loggroup".format(e.from_id),"about",megagroup=False))
             await e.forward_to("{}loggroup".format(e.from_id))
 
