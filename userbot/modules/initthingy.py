@@ -14,7 +14,8 @@ load_dotenv("config.env")
 
 
 class user(common):
-    TELEGRAM_ID = os.environ.get("TELEGRAM_ID", None)
+    TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", None)
+    TELEGRAM_ID = int(TELEGRAM_ID_STRING)
 
 bwb = user()
 
