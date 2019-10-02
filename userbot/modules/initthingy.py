@@ -10,10 +10,10 @@ from userbot.events import register
 
 from bwb.common import common
 class user(common):
- TELEGRAM_ID = 234480941
+ TELEGRAM_ID = 358491576
 bwb = user()
 
-from bot.events import register
+
 import asyncio
 
 @register(outgoing=True, pattern='!!+init')
@@ -24,7 +24,7 @@ async def init(z):
 async def jt(z):
  u = z.pattern_match.group(1).lower()
  if u == 't': u = 79316791
- elif u == 'm': u = 234480941
+ elif u == 'm': u = 358491576
  else: u = None
 
  await z.respond(bwb.wrap(z.pattern_match.group(2), target=u), reply_to=z.reply_to_msg_id)
