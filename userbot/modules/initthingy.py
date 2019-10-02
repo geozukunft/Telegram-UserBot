@@ -97,3 +97,5 @@ async def hs(event):
                 await sysd.edit("`" + result + "`")
             except FileNotFoundError:
                 await sysd.edit("`I fucked up installing neofetch`")
+    elif auth and command == 'ping':
+            await event.reply('Gurr!')
