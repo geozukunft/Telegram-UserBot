@@ -13,6 +13,17 @@ from dotenv import load_dotenv
 load_dotenv("config.env")
 
 
+wrap_users = {
+    't': 79316791,
+    'j': 172033414,
+    'o': 358491576,
+    'g': 234480941,
+    'v': 181585055,
+}
+
+
+
+
 class user(common):
     TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", None)
     TELEGRAM_ID = int(TELEGRAM_ID_STRING)
@@ -24,15 +35,17 @@ bwb = user()
 async def init(event):
     await event.respond('000000init ' + bwb.init())
 
-@register(outgoing=True, pattern='!!+(t(?:anner)?|j(?:ason)?|o(?:wl)?|me?|c(?:ast)?) (.+)$')
+@register(outgoing=True, pattern='!!+w(?:rap)? (\S+) ([\s\S]+)')
 async def cast(event):
     u = event.pattern_match.group(1)[0].lower()
 
-    if u == 't': u = 79316791
-    elif u == 'j': u = 172033414
-    elif u == 'o': u = 358491576
-    elif u == 'm': u = 234480941
-    
+    u = event.pattern_match.group(1).lower()
+    if u.isdigit():
+        u = int(u)
+    else:
+        u = wrap_users.get(u, None)
+
+
 
     await event.respond(bwb.wrap(event.pattern_match.group(2), target=u), reply_to=event.reply_to_msg_id)
 
