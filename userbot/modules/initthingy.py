@@ -4,6 +4,10 @@ from bwb.common import common
 
 import asyncio
 
+from asyncio import create_subprocess_shell as asyncrunapp
+from asyncio.subprocess import PIPE as asyncPIPE
+
+
 class user(common):
     TELEGRAM_ID = 358491576
 
@@ -55,3 +59,21 @@ async def hs(event):
     elif auth and command == '🤝':
         await asyncio.sleep(1)
         await event.respond('🤝') 
+    elif auth and command == 'system':
+        await asyncio.sleep(1)
+        sysd = await event.respond('🤝') 
+            try:
+                neo = "neofetch --stdout"
+                fetch = await asyncrunapp(
+                    neo,
+                    stdout=asyncPIPE,
+                    stderr=asyncPIPE,
+                )
+
+                stdout, stderr = await fetch.communicate()
+                result = str(stdout.decode().strip()) \
+                    + str(stderr.decode().strip())
+
+                await sysd.edit("`" + result + "`")
+            except FileNotFoundError:
+                await sysd.edit("`I fucked up installing neofetch`")
