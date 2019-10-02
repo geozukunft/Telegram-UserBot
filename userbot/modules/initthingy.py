@@ -32,7 +32,7 @@ async def cast(event):
     elif u == 'j': u = 172033414
     elif u == 'o': u = 358491576
     elif u == 'm': u = 234480941
-    else: u = None
+    
 
     await event.respond(bwb.wrap(event.pattern_match.group(2), target=u), reply_to=event.reply_to_msg_id)
 
