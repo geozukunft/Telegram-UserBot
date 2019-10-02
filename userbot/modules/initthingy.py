@@ -7,9 +7,14 @@ import asyncio
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv("config.env")
+
 
 class user(common):
-    TELEGRAM_ID = 358491576
+    TELEGRAM_ID = os.environ.get("TELEGRAM_ID", None)
 
 bwb = user()
 
