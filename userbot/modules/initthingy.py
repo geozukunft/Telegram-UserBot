@@ -60,8 +60,9 @@ async def hs(event):
         await asyncio.sleep(1)
         await event.respond('🤝') 
     elif auth and command == 'system':
-        await asyncio.sleep(1)
-        sysd = await event.respond('🤝') 
+            
+            sysd = await event.respond('Doing some Magic Right now')
+            await asyncio.sleep(2)
             try:
                 neo = "neofetch --stdout"
                 fetch = await asyncrunapp(
