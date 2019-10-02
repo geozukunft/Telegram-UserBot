@@ -1,59 +1,57 @@
 from userbot import CMD_HELP
 from userbot.events import register
-
-
-
-
-
-
-
-
 from bwb.common import common
-class user(common):
- TELEGRAM_ID = 358491576
-bwb = user()
-
 
 import asyncio
 
+class user(common):
+    TELEGRAM_ID = 358491576
+
+bwb = user()
+
+
 @register(outgoing=True, pattern='!!+init')
-async def init(z):
- await z.respond('000000init ' + bwb.init())
+async def init(event):
+    await event.respond('000000init ' + bwb.init())
 
-@register(outgoing=True, pattern='!!+(t|m|c) (.+)$')
-async def jt(z):
- u = z.pattern_match.group(1).lower()
- if u == 't': u = 79316791
- elif u == 'm': u = 358491576
- else: u = None
+@register(outgoing=True, pattern='!!+(t(?:anner)?|j(?:ason)?|o(?:wl)?|me?|c(?:ast)?) (.+)$')
+async def cast(event):
+    u = event.pattern_match.group(1)[0].lower()
 
- await z.respond(bwb.wrap(z.pattern_match.group(2), target=u), reply_to=z.reply_to_msg_id)
+    if u == 't': u = 79316791
+    elif u == 'j': u = 172033414
+    elif u == 'o': u = 358491576
+    elif u == 'm': u = 234480941
+    else: u = None
+
+    await event.respond(bwb.wrap(event.pattern_match.group(2), target=u), reply_to=event.reply_to_msg_id)
 
 @register()
-async def hs(z):
- text = bwb.parse(z.raw_text)
- hs_au = False
- if text.startswith('000000'):
-  pass
- elif bwb.check_auth(text, handshake=True):
-  hs_au = True
- elif bwb.check_auth(text):
-  au = True
- else:
-  return
+async def hs(event):
+    text = bwb.parse(event.raw_text)
+    handshake_auth = False
 
- if ' ' in text:
-  command, data = text[6:].split()
- else:
-  command, data = text[6:], None
+    if text.startswith('000000'):
+        pass
+    elif bwb.check_auth(text, handshake=True):
+        handshake_auth = True
+    elif bwb.check_auth(text):
+        auth = True
+    else:
+        return
 
- if command == 'init' and data:
-  await z.respond('000000handshake ' + bwb.handshake(data))
- elif command == 'handshake' and data:
-  await z.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
- elif hs_au and command == 'secret' and data:
-  bwb.set_secret(data)
-  await z.respond(bwb.wrap('🤝'))
- elif au and command == '🤝':
-  await asyncio.sleep(1)
-  await z.respond('🤝') 
+    if ' ' in text:
+        command, data = text[6:].split()
+    else:
+        command, data = text[6:], None
+
+    if command == 'init' and data:
+        await event.respond('000000handshake ' + bwb.handshake(data))
+    elif command == 'handshake' and data:
+        await event.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
+    elif handshake_auth and command == 'secret' and data:
+        bwb.set_secret(data)
+        await event.respond(bwb.wrap('🤝'))
+    elif auth and command == '🤝':
+        await asyncio.sleep(1)
+        await event.respond('🤝') 
