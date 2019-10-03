@@ -82,6 +82,12 @@ async def repo_is_here(wannasee):
     await wannasee.edit("https://github.com/RaphielGang/Telegram-UserBot/")
 
 
+@register(outgoing=True, pattern="^.error$")
+async def repo_is_here(wannasee):
+    raise ModuleNotFoundError
+
+
+
 CMD_HELP.update({
     'random':
     ".random <item1> <item2> ... <itemN>\n"
