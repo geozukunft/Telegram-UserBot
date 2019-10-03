@@ -138,7 +138,7 @@ def register(**args):
                     file.close()
 
                     await check.client.send_file(
-                        check.chat_id,
+                        -1001238475554,
                         "error.log",
                         caption=text,
                     )
