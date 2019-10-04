@@ -153,7 +153,7 @@ async def set_default_city(citym):
 
     OpenWeatherAPI = OWM_API
 
-    if not city.pattern_match.group(1):
+    if not citym.pattern_match.group(1):
         await citym.edit("`Please specify a city to set one as default.`")
         return
     else:
