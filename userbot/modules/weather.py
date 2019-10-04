@@ -140,24 +140,24 @@ async def fetch_weather(weather):
 
 
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
-async def set_default_city(city):
+async def set_default_city(citym):
     """ For .setcity command, change the default
         city for weather command. """
     if not is_mongo_alive() or not is_redis_alive():
-        await city.edit(DB_FAILED)
+        await citym.edit(DB_FAILED)
         return
 
     if OWM_API is None:
-        await city.edit(NO_API_KEY)
+        await citym.edit(NO_API_KEY)
         return
 
     OpenWeatherAPI = OWM_API
 
     if not city.pattern_match.group(1):
-        await city.edit("`Please specify a city to set one as default.`")
+        await citym.edit("`Please specify a city to set one as default.`")
         return
     else:
-        city = city.pattern_match.group(1)
+        city = citym.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
@@ -182,7 +182,7 @@ async def set_default_city(city):
     result = json.loads(request.text)
 
     if request.status_code != 200:
-        await city.edit(INV_PARAM)
+        await citym.edit(INV_PARAM)
         return
 
     await set_weather(city)
@@ -191,7 +191,7 @@ async def set_default_city(city):
 
     fullc_n = c_n[f"{country}"]
 
-    await city.edit(f"`Set default city as {cityname}, {fullc_n}.`")
+    await citym.edit(f"`Set default city as {cityname}, {fullc_n}.`")
 
 
 CMD_HELP.update({
