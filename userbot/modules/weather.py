@@ -9,12 +9,15 @@ import json
 from datetime import datetime
 
 import requests
-from pytz import country_timezones as c_tz, timezone as tz, country_names as c_n
+from pytz import country_names as c_n
+from pytz import country_timezones as c_tz
+from pytz import timezone as tz
 
-from userbot import (OPEN_WEATHER_MAP_APPID as OWM_API, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
-from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import (get_weather, set_weather)
+from userbot import CMD_HELP
+from userbot import OPEN_WEATHER_MAP_APPID as OWM_API
+from userbot import is_mongo_alive, is_redis_alive
+from userbot.events import register
+from userbot.modules.dbhelper import get_weather, set_weather
 
 # ===== CONSTANT =====
 INV_PARAM = "`Invalid parameters. Try again!`"
@@ -24,8 +27,10 @@ DB_FAILED = "`Database connections failed!`"
 
 # ====================
 async def get_tz(con):
-    """ Get time zone of the given country. """
-    """ Credits: @aragon12 and @zakaryan2004. """
+    """
+    Get time zone of the given country.
+    Credits: @aragon12 and @zakaryan2004.
+    """
     for c_code in c_n:
         if con == c_n[c_code]:
             return tz(c_tz[c_code][0])
@@ -37,35 +42,34 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.weather(?: |$)(.*)")
-@errors_handler
 async def fetch_weather(weather):
     """ For .weather command, gets the current weather of a city. """
-    if len(OWM_API) < 1:
+    if OWM_API is None:
         await weather.edit(NO_API_KEY)
         return
 
-    APPID = OWM_API
+    OpenWeatherAPI = OWM_API
     saved_props = await get_weather() if is_mongo_alive() else None
 
     if not weather.pattern_match.group(1):
         if 'weather_city' in saved_props:
-            CITY = saved_props['weather_city']
+            city = saved_props['weather_city']
         else:
             await weather.edit("`Please specify a city or set one as default.`"
                                )
             return
     else:
-        CITY = weather.pattern_match.group(1)
+        city = weather.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
         for country, timezones in c_tz.items() for timezone in timezones
     }
 
-    if "," in CITY:
-        newcity = CITY.split(",")
+    if "," in city:
+        newcity = city.split(",")
         if len(newcity[1]) == 2:
-            CITY = newcity[0].strip() + "," + newcity[1].strip()
+            city = newcity[0].strip() + "," + newcity[1].strip()
         else:
             country = await get_tz((newcity[1].strip()).title())
             try:
@@ -73,9 +77,9 @@ async def fetch_weather(weather):
             except KeyError:
                 await weather.edit(INV_PARAM)
                 return
-            CITY = newcity[0].strip() + "," + countrycode.strip()
+            city = newcity[0].strip() + "," + countrycode.strip()
 
-    url = f'https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={APPID}'
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OpenWeatherAPI}'
     request = requests.get(url)
     result = json.loads(request.text)
 
@@ -109,17 +113,18 @@ async def fetch_weather(weather):
     kmph = str(wind * 3.6).split(".")
     mph = str(wind * 2.237).split(".")
 
-    def fahrenheit(f):
-        temp = str(((f - 273.15) * 9 / 5 + 32)).split(".")
+    def fahrenheit(fahr):
+        temp = str(((fahr - 273.15) * 9 / 5 + 32)).split(".")
         return temp[0]
 
-    def celsius(c):
-        temp = str((c - 273.15)).split(".")
+    def celsius(celc):
+        temp = str((celc - 273.15)).split(".")
         return temp[0]
 
     def sun(unix):
-        xx = datetime.fromtimestamp(unix, tz=ctimezone).strftime("%I:%M %p")
-        return xx
+        suntime = datetime.fromtimestamp(unix,
+                                         tz=ctimezone).strftime("%I:%M %p")
+        return suntime
 
     await weather.edit(
         f"**Temperature:** `{celsius(curtemp)}°C | {fahrenheit(curtemp)}°F`\n"
@@ -135,35 +140,34 @@ async def fetch_weather(weather):
 
 
 @register(outgoing=True, pattern="^.setcity(?: |$)(.*)")
-@errors_handler
-async def set_default_city(city):
+async def set_default_city(citym):
     """ For .setcity command, change the default
         city for weather command. """
     if not is_mongo_alive() or not is_redis_alive():
-        await city.edit(DB_FAILED)
+        await citym.edit(DB_FAILED)
         return
 
-    if len(OWM_API) < 1:
-        await city.edit(NO_API_KEY)
+    if OWM_API is None:
+        await citym.edit(NO_API_KEY)
         return
 
-    APPID = OWM_API
+    OpenWeatherAPI = OWM_API
 
-    if not city.pattern_match.group(1):
-        await city.edit("`Please specify a city to set one as default.`")
+    if not citym.pattern_match.group(1):
+        await citym.edit("`Please specify a city to set one as default.`")
         return
     else:
-        CITY = city.pattern_match.group(1)
+        city = citym.pattern_match.group(1)
 
     timezone_countries = {
         timezone: country
         for country, timezones in c_tz.items() for timezone in timezones
     }
 
-    if "," in CITY:
-        newcity = CITY.split(",")
+    if "," in city:
+        newcity = city.split(",")
         if len(newcity[1]) == 2:
-            CITY = newcity[0].strip() + "," + newcity[1].strip()
+            city = newcity[0].strip() + "," + newcity[1].strip()
         else:
             country = await get_tz((newcity[1].strip()).title())
             try:
@@ -171,29 +175,33 @@ async def set_default_city(city):
             except KeyError:
                 await city.edit(INV_PARAM)
                 return
-            CITY = newcity[0].strip() + "," + countrycode.strip()
+            city = newcity[0].strip() + "," + countrycode.strip()
 
-    url = f'https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={APPID}'
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OpenWeatherAPI}'
     request = requests.get(url)
     result = json.loads(request.text)
 
     if request.status_code != 200:
-        await city.edit(INV_PARAM)
+        await citym.edit(INV_PARAM)
         return
 
-    await set_weather(CITY)
+    await set_weather(city)
     cityname = result['name']
     country = result['sys']['country']
 
     fullc_n = c_n[f"{country}"]
 
-    await city.edit(f"`Set default city as {cityname}, {fullc_n}.`")
+    await citym.edit(f"`Set default city as {cityname}, {fullc_n}.`")
 
 
 CMD_HELP.update({
     "weather":
-    ".weather <city> or .weather <city>, <country name/code>"
-    "\nUsage: Gets the weather of a city.\n"
-    "\n.setcity <city> or .setcity <city>, <country name/code>"
-    "\nUsage: Sets your default city so you can just use .weather."
+    ".weather <city> or .weather <city>, <country name/code>\n"
+    "Usage: Gets the weather of a city."
+})
+
+CMD_HELP.update({
+    "weather":
+    ".setcity <city> or .setcity <city>, <country name/code>\n"
+    "Usage: Sets your default city so you can just use .weather."
 })

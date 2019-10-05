@@ -12,9 +12,9 @@ from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
 
-from userbot import (CMD_HELP, is_mongo_alive, is_redis_alive)
-from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import (get_time, set_time)
+from userbot import CMD_HELP, is_mongo_alive, is_redis_alive
+from userbot.events import register
+from userbot.modules.dbhelper import get_time, set_time
 
 # ===== CONSTANT =====
 INV_CON = "`Invalid country.`"
@@ -49,7 +49,6 @@ async def get_tz(con):
 
 
 @register(outgoing=True, pattern="^.time(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
-@errors_handler
 async def time_func(tdata):
     """ For .time command, return the time of
         1. The country passed as an argument,
@@ -119,7 +118,6 @@ async def time_func(tdata):
 
 
 @register(outgoing=True, pattern="^.date(?: |$)(.*)(?<![0-9])(?: |$)([0-9]+)?")
-@errors_handler
 async def date_func(dat):
     """ For .date command, return the date of
         1. The country passed as an argument,
@@ -189,7 +187,6 @@ async def date_func(dat):
 
 
 @register(outgoing=True, pattern="^.settime (.*)(?<![0-9])(?: |$)([0-9]+)?")
-@errors_handler
 async def set_time_country(loc):
     """ For .settime command, change the default userbot
         country for date and time commands. """
@@ -246,22 +243,22 @@ async def set_time_country(loc):
 
 CMD_HELP.update({
     "time":
-    ".time <country name/code> <timezone number>"
-    "\nUsage: Get the time of a country. If a country has "
+    ".time <country name/code> <timezone number>\n"
+    "Usage: Get the time of a country. If a country has "
     "multiple timezones, Paperplane will list all of them "
     "and let you select one."
 })
 CMD_HELP.update({
     "date":
-    ".date <country name/code> <timezone number>"
-    "\nUsage: Get the date of a country. If a country has "
+    ".date <country name/code> <timezone number>\n"
+    "Usage: Get the date of a country. If a country has "
     "multiple timezones, Paperplane will list all of them "
     "and let you select one."
 })
 CMD_HELP.update({
     "settime":
-    ".settime <country name/code> <timezone number>"
-    "\nUsage: Set the default country for .time and .date "
+    ".settime <country name/code> <timezone number>\n"
+    "Usage: Set the default country for .time and .date "
     "command. If a country has multiple timezones, Paperpl"
     "ane will list all of them and let you select one."
 })

@@ -16,7 +16,7 @@ from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, bot,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import errors_handler, register
+from userbot.events import register
 from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
                                       ungmute, unmute)
 from userbot.utils import helpers
@@ -28,7 +28,6 @@ from userbot.utils.mdtex import Bold, Code, KeyValueItem, MDTeXDocument, Section
 
 
 @register(outgoing=True, pattern="^\.i(nvite)?l(ink)?")
-@errors_handler
 async def invitelink(event):
     """Command to get link creator, chatid and the random part of an invite link."""
 

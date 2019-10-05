@@ -6,13 +6,11 @@
 """ Userbot module containing various scrapers. """
 
 import os
-from asyncio import create_subprocess_shell as asyncsh
-from asyncio.subprocess import PIPE as asyncsh_PIPE
 from html import unescape
 from re import findall
-from urllib import parse
+from shutil import rmtree
 from urllib.error import HTTPError
-from search_engine_parser import GoogleSearch
+
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
 from googleapiclient.discovery import build
@@ -22,18 +20,19 @@ from gtts import gTTS
 from pytube import YouTube
 from pytube.helpers import safe_filename
 from requests import get
+from search_engine_parser import GoogleSearch
 from urbandict import define
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CURRENCY_API, bot
-from userbot.events import register, errors_handler
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, CURRENCY_API,
+                     YOUTUBE_API_KEY, bot)
+from userbot.events import register
 
 LANG = "en"
 
 
 @register(outgoing=True, pattern="^.img (.*)")
-@errors_handler
 async def img_sampler(event):
     """ For .img command, search and return images matching the query. """
     await event.edit("Processing...")
@@ -60,14 +59,11 @@ async def img_sampler(event):
     lst = paths[0][query]
     await event.client.send_file(
         await event.client.get_input_entity(event.chat_id), lst)
-    os.remove(lst[0])
-    os.remove(lst[1])
-    os.rmdir(os.path.dirname(os.path.abspath(lst[0])))
+    rmtree(os.path.dirname(os.path.abspath(lst[0])))
     await event.delete()
 
 
 @register(outgoing=True, pattern=r"^.google (.*)")
-@errors_handler
 async def gsearch(q_event):
     """ For .google command, do a Google search. """
     match = q_event.pattern_match.group(1)
@@ -101,7 +97,6 @@ async def gsearch(q_event):
 
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
-@errors_handler
 async def wiki(wiki_q):
     """ For .google command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -134,7 +129,6 @@ async def wiki(wiki_q):
 
 
 @register(outgoing=True, pattern="^.ud (.*)")
-@errors_handler
 async def urban_dict(ud_e):
     """ For .ud command, fetch content from Urban Dictionary. """
     await ud_e.edit("Processing...")
@@ -174,7 +168,6 @@ async def urban_dict(ud_e):
 
 
 @register(outgoing=True, pattern=r"^.tts(?: |$)([\s\S]*)")
-@errors_handler
 async def text_to_speech(query):
     """ For .tts command, a wrapper for Google Text-to-Speech. """
     textx = await query.get_reply_message()
@@ -219,7 +212,6 @@ async def text_to_speech(query):
 
 
 @register(outgoing=True, pattern=r"^.trt(?: |$)([\s\S]*)")
-@errors_handler
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
     translator = Translator()
@@ -255,7 +247,6 @@ async def translateme(trans):
 
 
 @register(pattern="^.lang (.*)", outgoing=True)
-@errors_handler
 async def lang(value):
     """ For .lang command, change the default langauge of userbot scrapers. """
     global LANG
@@ -267,7 +258,6 @@ async def lang(value):
 
 
 @register(outgoing=True, pattern="^.yt (.*)")
-@errors_handler
 async def yt_search(video_q):
     """ For .yt command, do a YouTube search from Telegram. """
     query = video_q.pattern_match.group(1)
@@ -332,7 +322,6 @@ def youtube_search(query,
 
 
 @register(outgoing=True, pattern=r"^.yt_dl (\S*) ?(\S*)")
-@errors_handler
 async def download_video(v_url):
     """ For .yt_dl command, download videos from YouTube. """
     url = v_url.pattern_match.group(1)
@@ -398,7 +387,6 @@ async def download_video(v_url):
 
 
 @register(outgoing=True, pattern=r"^.cr (\S*) ?(\S*) ?(\S*)")
-@errors_handler
 async def currency(cconvert):
     """ For .cr command, convert amount, from, to. """
     amount = cconvert.pattern_match.group(1)
@@ -421,47 +409,56 @@ def deEmojify(inputString):
 
 CMD_HELP.update({
     'img':
-    ".img <search_query>"
-    "\nUsage: Does an image search on Google and shows two images."
+    ".img <search_query>\n"
+    "Usage: Does an image search on Google and shows two images."
 })
+
 CMD_HELP.update(
-    {'google': ".google <search_query>"
-     "\nUsage: Does a search on Google."})
+    {'google': ".google <search_query>\n"
+     "Usage: Does a search on Google."})
+
 CMD_HELP.update(
-    {'wiki': ".wiki <search_query>"
-     "\nUsage: Does a Wikipedia search."})
+    {'wiki': ".wiki <search_query>\n"
+     "Usage: Does a Wikipedia search."})
+
 CMD_HELP.update(
-    {'ud': ".ud <search_query>"
-     "\nUsage: Does a search on Urban Dictionary."})
+    {'ud': ".ud <search_query>\n"
+     "Usage: Does a search on Urban Dictionary."})
+
 CMD_HELP.update({
     'tts':
-    ".tts <text> or reply to someones text with .trt"
-    "\nUsage: Translates text to speech for the default language which is set."
+    ".tts <text> or reply to someones text with .trt\n"
+    "Usage: Translates text to speech for the default language which is set."
 })
+
 CMD_HELP.update({
     'trt':
-    ".trt <text> or reply to someones text with .trt"
-    "\nUsage: Translates text to the default language which is set."
+    ".trt <text> or reply to someones text with .trt\n"
+    "Usage: Translates text to the default language which is set."
 })
+
 CMD_HELP.update({
     'lang':
-    ".lang <lang>"
-    "\nUsage: Changes the default language of"
+    ".lang <lang>\n"
+    "Usage: Changes the default language of"
     "userbot scrapers used for Google TRT, "
     "TTS may not work."
 })
+
 CMD_HELP.update(
-    {'yt': ".yt <search_query>"
-     "\nUsage: Does a YouTube search. "})
+    {'yt': ".yt <search_query>\n"
+     "Usage: Does a YouTube search. "})
+
 CMD_HELP.update({
     'yt_dl':
-    ".yt_dl <url> <quality>(optional)"
-    "\nUsage: Download videos from YouTube. "
+    ".yt_dl <url> <quality>(optional)\n"
+    "Usage: Download videos from YouTube. "
     "If no quality is specified, the highest downloadable quality is "
     "downloaded. Will send the link if the video is larger than 50 MB."
 })
+
 CMD_HELP.update({
     'cr':
-    ".cr <from> <to>"
-    "\nUsage: Currency converter, converts <from> to <to>."
+    ".cr <from> <to>\n"
+    "Usage: Currency converter, converts <from> to <to>."
 })

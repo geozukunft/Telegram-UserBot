@@ -18,7 +18,7 @@ from telethon.tl.functions.photos import (DeletePhotosRequest,
 from telethon.tl.types import InputPhoto, MessageMediaPhoto
 
 from userbot import CMD_HELP, bot
-from userbot.events import register, errors_handler
+from userbot.events import register
 
 # ====================== CONSTANT ===============================
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
@@ -36,7 +36,6 @@ USERNAME_TAKEN = "```This username is already taken.```"
 
 
 @register(outgoing=True, pattern="^.name")
-@errors_handler
 async def update_name(name):
     """ For .name command, change your name in Telegram. """
     newname = name.text[6:]
@@ -53,7 +52,6 @@ async def update_name(name):
 
 
 @register(outgoing=True, pattern="^.profilepic$")
-@errors_handler
 async def set_profilepic(propic):
     """ For .profilepic command, change your profile picture in Telegram. """
     replymsg = await propic.get_reply_message()
@@ -80,7 +78,6 @@ async def set_profilepic(propic):
 
 
 @register(outgoing=True, pattern="^.setbio (.*)")
-@errors_handler
 async def set_biograph(setbio):
     """ For .setbio command, set a new bio for your profile in Telegram. """
     newbio = setbio.pattern_match.group(1)
@@ -89,7 +86,6 @@ async def set_biograph(setbio):
 
 
 @register(outgoing=True, pattern="^.username (.*)")
-@errors_handler
 async def update_username(username):
     """ For .username command, set a new username in Telegram. """
     newusername = username.pattern_match.group(1)
@@ -101,7 +97,6 @@ async def update_username(username):
 
 
 @register(outgoing=True, pattern=r"^.delpfp")
-@errors_handler
 async def remove_profilepic(delpfp):
     """ For .delpfp command, delete your current
         profile picture in Telegram. """
@@ -131,25 +126,25 @@ async def remove_profilepic(delpfp):
 
 CMD_HELP.update({
     "username":
-    ".username <new_username>"
-    "\nUsage: Change your Telegram username."
+    ".username <new_username>\n"
+    "Usage: Change your Telegram username."
 })
 CMD_HELP.update({
     "name":
-    ".name <firstname> or .name <firstname> <lastname>"
-    "\nUsage: Chane your Telegram name."
-    "\n(First and last name will get split by the first space)"
+    ".name <firstname> or .name <firstname> <lastname>\n"
+    "Usage: Chane your Telegram name.\n"
+    "(First and last name will get split by the first space)"
 })
 CMD_HELP.update({
     "profilepic":
-    ".profilepic"
-    "\nUsage: Change your Telegram avatar with the replied photo."
+    ".profilepic\n"
+    "Usage: Change your Telegram avatar with the replied photo."
 })
 CMD_HELP.update(
-    {"setbio": ".setbio <new_bio>"
-     "\nUsage: Change your Telegram bio."})
+    {"setbio": ".setbio <new_bio>\n"
+     "Usage: Change your Telegram bio."})
 CMD_HELP.update({
     "delpfp":
-    ".delpfp or .delpfp <number>/<all>"
-    "\nUsage: Delete your Telegram profile avatar(s)."
+    ".delpfp or .delpfp <number>/<all>\n"
+    "Usage: Delete your Telegram profile avatar(s)."
 })

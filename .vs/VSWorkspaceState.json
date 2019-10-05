@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\userbot",
-    "\\userbot\\modules"
+    "\\userbot"
   ],
-  "SelectedNode": "\\userbot\\modules\\kang.py",
+  "SelectedNode": "\\userbot\\utils",
   "PreviewInSolutionExplorer": false
 }

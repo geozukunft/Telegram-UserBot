@@ -10,12 +10,11 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import User
 
-from userbot import (COUNT_PM, CMD_HELP, BOTLOG, BOTLOG_CHATID, PM_AUTO_BAN,
-                     LASTMSG, LOGS, is_mongo_alive,
-                     is_redis_alive)
-from userbot.events import register, errors_handler
-from userbot.modules.dbhelper import (approval, approve, block_pm, notif_state,
-                                      notif_off, notif_on)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_PM, LASTMSG, LOGS,
+                     PM_AUTO_BAN, is_mongo_alive, is_redis_alive)
+from userbot.events import register
+from userbot.modules.dbhelper import (approval, approve, block_pm, notif_off,
+                                      notif_on, notif_state)
 
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
@@ -26,7 +25,7 @@ UNAPPROVED_MSG = (
 # =================================================================
 
 
-@register(incoming=True, disable_edited=True)
+@register(incoming=True, disable_edited=True, disable_errors=True)
 async def permitpm(event):
     """ Permits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -97,7 +96,7 @@ async def permitpm(event):
                         )
 
 
-@register(disable_edited=True, outgoing=True)
+@register(disable_edited=True, outgoing=True, disable_errors=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if event.is_private:
@@ -121,7 +120,6 @@ async def auto_accept(event):
 
 
 @register(outgoing=True, pattern="^.notifoff$")
-@errors_handler
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting
         notifications from unapproved PMs. """
@@ -132,7 +130,6 @@ async def notifoff(noff_event):
 
 
 @register(outgoing=True, pattern="^.notifon$")
-@errors_handler
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     if await notif_on() is False:
@@ -142,7 +139,6 @@ async def notifon(non_event):
 
 
 @register(outgoing=True, pattern="^.approve$")
-@errors_handler
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -175,7 +171,6 @@ async def approvepm(apprvpm):
 
 
 @register(outgoing=True, pattern="^.block$")
-@errors_handler
 async def blockpm(block):
     """ For .block command, block people from PMing you! """
     if not is_mongo_alive() or not is_redis_alive():
@@ -211,7 +206,6 @@ async def blockpm(block):
 
 
 @register(outgoing=True, pattern="^.unblock$")
-@errors_handler
 async def unblockpm(unblock):
     """ For .unblock command, let people PMing you again! """
     if unblock.reply_to_msg_id:
@@ -235,14 +229,24 @@ async def unblockpm(unblock):
 
 CMD_HELP.update({
     "pmpermit":
-    ".approve"
-    "\nUsage: Approve the mentioned/replied person to PM."
-    "\n\n.block"
-    "\nUsage: Block the person from PMing you."
-    "\n\n.unblock"
-    "\nUsage: Unblock the person so they can PM you."
-    "\n\n.notifoff"
-    "\nUsage: Clear any notifications of unapproved PMs."
-    "\n\n.notifon"
-    "\nUsage: Allow notifications for unapproved PMs."
+    ".approve\n"
+    "Usage: Approve the mentioned/replied person to PM."
 })
+
+CMD_HELP.update(
+    {"block": ".block\n"
+     "Usage: Block the person from PMing you."})
+
+CMD_HELP.update(
+    {"unblock": ".unblock\n"
+     "Usage: Unblock the person so they can PM you."})
+
+CMD_HELP.update({
+    "notifoff":
+    ".notifoff\n"
+    "Usage: Clear any notifications of unapproved PMs."
+})
+
+CMD_HELP.update(
+    {"notifon": ".notifon\n"
+     "Usage: Allow notifications for unnaproved PMs."})

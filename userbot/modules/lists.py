@@ -6,11 +6,12 @@
 """ Userbot module containing commands for keeping lists. """
 
 import re
+
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_mongo_alive,
                      is_redis_alive)
-from userbot.modules.dbhelper import (get_list, get_lists, add_list,
-                                      delete_list, set_list)
-from userbot.events import register, errors_handler
+from userbot.events import register
+from userbot.modules.dbhelper import (add_list, delete_list, get_list,
+                                      get_lists, set_list)
 
 # =================== CONSTANTS ===================
 
@@ -24,7 +25,6 @@ LIST_HEADER = "[Paperplane-List] List **{}({})**\n\n"
 
 
 @register(outgoing=True, pattern="^.lists$")
-@errors_handler
 async def lists_active(event):
     """ For .lists command, list all of the lists saved in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -45,7 +45,6 @@ async def lists_active(event):
 
 
 @register(outgoing=True, pattern=r"^.dellist ?(\w*)")
-@errors_handler
 async def removelists(event):
     """ For .dellist command, delete list with the given name."""
     if not is_mongo_alive() or not is_redis_alive():
@@ -81,7 +80,6 @@ async def removelists(event):
 
 
 @register(outgoing=True, pattern=r"^.add(g)?list (\w*)")
-@errors_handler
 async def addlist(event):
     """ For .add(g)list command, saves lists in a chat. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -109,7 +107,6 @@ async def addlist(event):
 
 
 @register(outgoing=True, pattern=r"^.addlistitem(s)? ?(\w*)\n((.|\n*)*)")
-@errors_handler
 async def add_list_items(event):
     """ For .addlistitems command, add item(s) to a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -153,14 +150,14 @@ async def add_list_items(event):
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
-        log = "Added item(s) {newitems.splitlines()} "
-        log += f"to {listname} in {listat}."
+        log = f"Added item(s) to {listname} in {listat}.\n"
+        log += "New items:\n"
+        log += f"{newitems}"
 
         await event.client.send_message(BOTLOG_CHATID, log)
 
 
 @register(outgoing=True, pattern=r"^.editlistitem ?(\w*)? ([0-9]+) (.*)")
-@errors_handler
 async def edit_list_item(event):
     """ For .editlistitem command, edit an individual item on a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -196,13 +193,12 @@ async def edit_list_item(event):
     if BOTLOG:
         listat = "global storage" if _list['chat_id'] else str(event.chat_id)
 
-        log = "Edited item {item_number} of "
+        log = f"Edited item {item_number} of "
         log += f"{listname} in {listat} successfully."
         await event.client.send_message(BOTLOG_CHATID, log)
 
 
 @register(outgoing=True, pattern=r"^.rmlistitem ?(\w*)? ([0-9]+)")
-@errors_handler
 async def rmlistitems(event):
     """ For .rmlistitem command, remove an item from the list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -254,7 +250,6 @@ Use` ${} `to get the list.`"
 
 
 @register(outgoing=True, pattern=r"^.setlist ?(\w*)? (global|local)")
-@errors_handler
 async def setliststate(event):
     """ For .setlist command, changes the state of a list. """
     if not is_mongo_alive() or not is_redis_alive():
@@ -299,7 +294,10 @@ async def setliststate(event):
             f"Changed state of list {listname} to {_futureState}")
 
 
-@register(pattern=r"\$\w*", disable_edited=True, ignore_unsafe=True)
+@register(pattern=r"\$\w*",
+          disable_edited=True,
+          ignore_unsafe=True,
+          disable_errors=True)
 async def lists_logic(event):
     """ Lists logic. """
     try:
@@ -332,7 +330,6 @@ async def lists_logic(event):
 
 
 @register(pattern=r"^.getlist ?(\w*)?")
-@errors_handler
 async def getlist_logic(event):
     """ For .getlist, get the list by the name. """
     if not (await event.get_sender()).bot:
@@ -372,23 +369,23 @@ async def getlist_logic(event):
             await event.edit(f"`List {listname} not found!`")
 
 
+# TODO : CLEAN THIS
 CMD_HELP.update({
     "lists":
-    ".lists"
-    "\nUsage: Get all of the lists (both local and global)"
-    "\n\n$<listname>"
-    "\nUsage: Gets the list with name listname"
-    "\n\n.addlist <listname> <items>"
-    "\nUsage: Saves items as a list with the name listname. "
-    "Separate items with a new line."
-    "\n\n.addglist <listname> <items>"
-    "\nUsage: Saves items as a global list with the name listname. "
-    "Separate items with a new line. Accessible from every chat."
-    "\n\n.dellist <listname>"
-    "\nUsage: Delete the list with name listname."
-    "\n\n.addlistitem(s) <listname> \n"
-    "<items>"
-    "\nUsage: Add items to the list listname. "
+    ".lists\n"
+    "Usage: Get all of the lists (both local and global)\n\n"
+    "$<listname>"
+    "Usage: Gets the list with name listname\n\n"
+    ".addlist <listname> <items>\n"
+    "Usage: Saves items as a list with the name listname. "
+    "Separate items with a new line.\n\n"
+    ".addglist <listname> <items>\n"
+    "Usage: Saves items as a global list with the name listname. "
+    "Separate items with a new line. Accessible from every chat.\n\n"
+    ".dellist <listname>\n"
+    "Usage: Delete the list with name listname.\n\n"
+    ".addlistitem(s) <listname> <items> \n\n"
+    "Usage: Add items to the list listname. "
     "Separate items with a new line. "
     "The first items must start from a new line."
     "\n\n.rmlistitem <listname> <item_number>"

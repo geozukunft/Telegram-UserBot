@@ -9,13 +9,12 @@ from asyncio import sleep
 
 from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
                      is_mongo_alive, is_redis_alive)
-from userbot.events import register, errors_handler
+from userbot.events import register
 
 chatlist = []
 
 
 @register(incoming=True)
-@errors_handler
 async def fischer(handler):
     global chatlist
     if handler.chat_id in chatlist:
@@ -26,7 +25,6 @@ async def fischer(handler):
             
 
 @register(outgoing=True, pattern="^\.startfisch")
-@errors_handler
 async def startfischer(handler):
     global chatlist
     chatlist.append(handler.chat_id)
