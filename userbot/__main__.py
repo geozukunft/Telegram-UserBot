@@ -6,15 +6,16 @@
 """ Userbot start point """
 
 from importlib import import_module
-from sqlite3 import connect
 import os
 
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
-
-from userbot import LogicWorker, LOGS, bot
+from userbot import LOGS, bot
 from userbot.modules import ALL_MODULES
 
-#
+INVALID_PH = '\nERROR: The Phone No. entered is INVALID' \
+             '\n  Tip: Use Country Code along with No.' \
+             '\n       Recheck your Phone Number'
+
 try:
     bot.start()
 except PhoneNumberInvalidError:
