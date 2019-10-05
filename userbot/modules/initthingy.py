@@ -1,6 +1,6 @@
 from userbot import CMD_HELP
 from userbot.events import register
-from bwb.common import common
+from bwb import bwb
 
 import asyncio
 
@@ -12,23 +12,26 @@ from dotenv import load_dotenv
 
 load_dotenv("config.env")
 
+TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", None)
+TELEGRAM_ID = int(TELEGRAM_ID_STRING)
+
+bwb = bwb.bwb(TELEGRAM_ID)
+
 
 wrap_users = {
-    't': 79316791,
-    'j': 172033414,
-    'o': 358491576,
-    'g': 234480941,
-    'v': 181585055,
+    't': 79316791,   # Tanner
+    'j': 172033414,  # Jason
+    'o': 358491576,  # Jonas
+    'm': 964048273,  # Mini Eule
+    'g': 234480941,  # Twit
+    'v': 181585055,  # Viktor
 }
 
 
 
-
 class user(common):
-    TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", None)
-    TELEGRAM_ID = int(TELEGRAM_ID_STRING)
 
-bwb = user()
+
 
 
 @register(outgoing=True, pattern='!!+init')
