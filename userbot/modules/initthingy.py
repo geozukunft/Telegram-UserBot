@@ -29,7 +29,7 @@ wrap_users = {
 
 
 
-class user(common):
+
 
 
 
