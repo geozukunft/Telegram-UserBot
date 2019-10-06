@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\userbot"
+    "\\userbot",
+    "\\userbot\\modules"
   ],
-  "SelectedNode": "\\userbot\\utils",
+  "SelectedNode": "\\yey.txt",
   "PreviewInSolutionExplorer": false
 }
