@@ -32,9 +32,23 @@ async def startfischer(handler):
 
 
 
+@register(outgoing=True, pattern="^\.stopfisch")
+async def startfischer(handler):
+    global chatlist
+    chatlist.remove(handler.chat_id)
+    await handler.edit("sollte getan sein")
+
+
+@register(outgoing=True, pattern="^\.notstopp")
+async def startfischer(handler):
+    global chatlist
+    chatlist.clear()
+    await handler.edit("sollte getan sein")
 
 
 
 CMD_HELP.update({
-    "startfisch":" Startet Fisching"
+    "startfisch":" Startet Fisching",
+    "stopfisch":"Stoppt fisching im chat",
+    "notstop":"stoppt fisching in allen chats"
 })
