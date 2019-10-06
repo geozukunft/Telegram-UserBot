@@ -70,7 +70,7 @@ async def hs(event):
     else:
         command, data = text[6:], None
 
-    if command == 'init' and data:
+    if command and command == 'init' and data:
         await event.respond('000000handshake ' + bwb.handshake(data))
     elif command == 'handshake' and data:
         try:    
