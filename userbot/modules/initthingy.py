@@ -29,7 +29,7 @@ wrap_users = {
 
 
 
-@register(outgoing=True, pattern='!!+init'))
+@register(outgoing=True, pattern='!!+init')
 async def init(event):
     await event.respond('000000init ' + bwb.init())
 
