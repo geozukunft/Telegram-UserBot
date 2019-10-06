@@ -29,30 +29,26 @@ wrap_users = {
 
 
 
-
-
-
-
-
-@register(outgoing=True, pattern='!!+init')
+@register(NewMessage(outgoing=True, pattern='!!+init'))
 async def init(event):
     await event.respond('000000init ' + bwb.init())
 
-@register(outgoing=True, pattern='!!+w(?:rap)? (\S+) ([\s\S]+)')
-async def cast(event):
-    u = event.pattern_match.group(1)[0].lower()
 
-    u = event.pattern_match.group(1).lower()
+@register(NewMessage(outgoing=True, pattern=r'!!+(e(?:enc)?)?w(?:rap)? (\S+) ([\s\S]+)'))
+async def wrap(event):
+    enc = event.pattern_match.group(1) is not None
+    message = event.pattern_match.group(3)
+
+    u = event.pattern_match.group(2).lower()
     if u.isdigit():
         u = int(u)
     else:
         u = wrap_users.get(u, None)
 
+    await event.respond(bwb.wrap(message, target=u, enc=enc), reply_to=event.reply_to_msg_id)
 
 
-    await event.respond(bwb.wrap(event.pattern_match.group(2), target=u), reply_to=event.reply_to_msg_id)
-
-@register()
+@register(NewMessage())
 async def hs(event):
     text = bwb.parse(event.raw_text)
     handshake_auth = False
@@ -78,9 +74,13 @@ async def hs(event):
     elif handshake_auth and command == 'secret' and data:
         bwb.set_secret(data)
         await event.respond(bwb.wrap('🤝'))
-    elif auth and command == '🤝':
-        await asyncio.sleep(1)
-        await event.respond('🤝') 
+    elif auth:
+        command = command.lower()
+        if command == '🤝':
+            await asyncio.sleep(1)
+            await event.respond('🤝')
+        elif command == 'ping':
+            await event.reply('Pong!')
     elif auth and command == 'system':
             
             sysd = await event.respond('Doing some Magic Right now')
