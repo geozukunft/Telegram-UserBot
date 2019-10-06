@@ -34,7 +34,7 @@ async def init(event):
     await event.respond('000000init ' + bwb.init())
 
 
-@register(outgoing=True, pattern=r'!!+(e(?:enc)?)?w(?:rap)? (\S+) ([\s\S]+)'))
+@register(outgoing=True, pattern=r'!!+(e(?:enc)?)?w(?:rap)? (\S+) ([\s\S]+)')
 async def wrap(event):
     enc = event.pattern_match.group(1) is not None
     message = event.pattern_match.group(3)
