@@ -15,3 +15,4 @@ userbot/modules/sql_helper/__pycache__/*
 error.log
 bin/*
 .vs/*
+.vs/slnx.sqlite
