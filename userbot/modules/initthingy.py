@@ -61,7 +61,7 @@ async def hs(event):
             auth = True
         else:
             return
-    except Exception as identifier:
+    except Exception:
         pass
         
     try:
