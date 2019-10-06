@@ -52,15 +52,18 @@ async def wrap(event):
 async def hs(event):
     text = bwb.parse(event.raw_text)
     handshake_auth = False
-
-    if text.startswith('000000'):
+    try:
+        if text.startswith('000000'):
+            pass
+        elif bwb.check_auth(text, handshake=True):
+            handshake_auth = True
+        elif bwb.check_auth(text):
+            auth = True
+        else:
+            return
+    except Exception as identifier:
         pass
-    elif bwb.check_auth(text, handshake=True):
-        handshake_auth = True
-    elif bwb.check_auth(text):
-        auth = True
-    else:
-        return
+        
 
     if ' ' in text:
         command, data = text[6:].split()
@@ -70,7 +73,10 @@ async def hs(event):
     if command == 'init' and data:
         await event.respond('000000handshake ' + bwb.handshake(data))
     elif command == 'handshake' and data:
-        await event.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
+        try:    
+            await event.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
+        except:
+            pass
     elif handshake_auth and command == 'secret' and data:
         bwb.set_secret(data)
         await event.respond(bwb.wrap('🤝'))
