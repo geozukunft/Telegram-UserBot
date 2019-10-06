@@ -29,12 +29,12 @@ wrap_users = {
 
 
 
-@register(NewMessage(outgoing=True, pattern='!!+init'))
+@register(outgoing=True, pattern='!!+init'))
 async def init(event):
     await event.respond('000000init ' + bwb.init())
 
 
-@register(NewMessage(outgoing=True, pattern=r'!!+(e(?:enc)?)?w(?:rap)? (\S+) ([\s\S]+)'))
+@register(outgoing=True, pattern=r'!!+(e(?:enc)?)?w(?:rap)? (\S+) ([\s\S]+)'))
 async def wrap(event):
     enc = event.pattern_match.group(1) is not None
     message = event.pattern_match.group(3)
@@ -48,7 +48,7 @@ async def wrap(event):
     await event.respond(bwb.wrap(message, target=u, enc=enc), reply_to=event.reply_to_msg_id)
 
 
-@register(NewMessage())
+@register()
 async def hs(event):
     text = bwb.parse(event.raw_text)
     handshake_auth = False
