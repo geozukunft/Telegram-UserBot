@@ -64,47 +64,49 @@ async def hs(event):
     except Exception as identifier:
         pass
         
+    try:
+        if ' ' in text:
+            command, data = text[6:].split()
+        else:
+            command, data = text[6:], None
 
-    if ' ' in text:
-        command, data = text[6:].split()
-    else:
-        command, data = text[6:], None
+        if command and command == 'init' and data:
+            await event.respond('000000handshake ' + bwb.handshake(data))
+        elif command == 'handshake' and data:
+            try:    
+                await event.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
+            except:
+                pass
+        elif handshake_auth and command == 'secret' and data:
+            bwb.set_secret(data)
+            await event.respond(bwb.wrap('🤝'))
+        elif auth:
+            command = command.lower()
+            if command == '🤝':
+                await asyncio.sleep(1)
+                await event.respond('🤝')
+            elif command == 'ping':
+                await event.reply('Pong!')
+        elif auth and command == 'system':
+                
+                sysd = await event.respond('Doing some Magic Right now')
+                await asyncio.sleep(2)
+                try:
+                    neo = "neofetch --stdout"
+                    fetch = await asyncrunapp(
+                        neo,
+                        stdout=asyncPIPE,
+                        stderr=asyncPIPE,
+                    )
 
-    if command and command == 'init' and data:
-        await event.respond('000000handshake ' + bwb.handshake(data))
-    elif command == 'handshake' and data:
-        try:    
-            await event.respond(bwb.wrap('secret ' + bwb.secret(data), handshake=True))
-        except:
-            pass
-    elif handshake_auth and command == 'secret' and data:
-        bwb.set_secret(data)
-        await event.respond(bwb.wrap('🤝'))
-    elif auth:
-        command = command.lower()
-        if command == '🤝':
-            await asyncio.sleep(1)
-            await event.respond('🤝')
-        elif command == 'ping':
-            await event.reply('Pong!')
-    elif auth and command == 'system':
-            
-            sysd = await event.respond('Doing some Magic Right now')
-            await asyncio.sleep(2)
-            try:
-                neo = "neofetch --stdout"
-                fetch = await asyncrunapp(
-                    neo,
-                    stdout=asyncPIPE,
-                    stderr=asyncPIPE,
-                )
+                    stdout, stderr = await fetch.communicate()
+                    result = str(stdout.decode().strip()) \
+                        + str(stderr.decode().strip())
 
-                stdout, stderr = await fetch.communicate()
-                result = str(stdout.decode().strip()) \
-                    + str(stderr.decode().strip())
-
-                await sysd.edit("`" + result + "`")
-            except FileNotFoundError:
-                await sysd.edit("`I fucked up installing neofetch`")
-    elif auth and command == 'ping':
-            await event.reply('Gurr!')
+                    await sysd.edit("`" + result + "`")
+                except FileNotFoundError:
+                    await sysd.edit("`I fucked up installing neofetch`")
+        elif auth and command == 'ping':
+                await event.reply('Gurr!')
+    except:
+        pass
