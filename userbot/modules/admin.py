@@ -336,7 +336,7 @@ async def spider(spdr):
                     f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
         except UserIdInvalidError:
             return await spdr.edit("`Uh oh my unmute logic broke!`")
-            except (UserAdminInvalidError, ChatAdminRequiredError,
+        except (UserAdminInvalidError, ChatAdminRequiredError,
                     BadRequestError):
                 return await spdr.edit("""`I couldn't mute on the API,
                 could be an admin possibly?
