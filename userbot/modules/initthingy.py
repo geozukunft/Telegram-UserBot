@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv("config.env")
 
-TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", None)
+TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", 88)
 TELEGRAM_ID = int(TELEGRAM_ID_STRING)
 
 bwb = bwb.bwb(TELEGRAM_ID)
