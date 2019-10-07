@@ -13,10 +13,11 @@ from dotenv import load_dotenv
 load_dotenv("config.env")
 
 TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID2", 358491576)
+print(TELEGRAM_ID_STRING)
 TELEGRAM_ID = int(TELEGRAM_ID_STRING)
-
+print(TELEGRAM_ID)
 bwb = bwb.bwb(TELEGRAM_ID)
-
+print(str(bwb))
 
 wrap_users = {
     't': 79316791,   # Tanner
@@ -31,6 +32,7 @@ wrap_users = {
 
 @register(outgoing=True, pattern='!!+init')
 async def init(event):
+    print("starte respond")
     await event.respond('000000init ' + bwb.init())
 
 
