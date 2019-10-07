@@ -83,7 +83,7 @@ async def repo_is_here(wannasee):
 
 
 @register(outgoing=True, pattern="^.error$")
-async def repo_is_here(wannasee):
+async def lol(wannasee):
     raise ModuleNotFoundError
 
 
