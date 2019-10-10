@@ -6,8 +6,8 @@ import userbot
 
 
 
-
-@register(incoming=True, from_users=206212245 697983746 358491576)
+users = [206212245, 697983746, 358491576]
+@register(incoming=True, from_users=users)
 #@errors_handler
 async def funcname(e):
     try:
