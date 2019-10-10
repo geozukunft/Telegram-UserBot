@@ -7,11 +7,11 @@ import userbot
 
 
 
-@register(incoming=True, from_users(206212245, 697983746, 358491576))
+@register(incoming=True, from_users=(206212245, 697983746, 358491576))
 #@errors_handler
 async def funcname(e):
     try:
-        print
+        print("versuche Forward!")
         await e.forward_to("{}loggroup".format(e.from_id))
 
     except:
