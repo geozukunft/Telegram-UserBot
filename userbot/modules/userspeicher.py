@@ -15,7 +15,7 @@ async def funcname(e):
     except:
         try:
             
-            createdPrivateChannel = await e.client(CreateChannelRequest("{}loggroup".format(e.from_id),"about",megagroup=False))
+            await e.client(CreateChannelRequest("{}loggroup".format(e.from_id),"about",megagroup=False))
         
             await e.forward_to("{}loggroup".format(e.from_id))
         except:
