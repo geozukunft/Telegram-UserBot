@@ -20,7 +20,7 @@ async def handler(event):
         await asyncio.sleep(1)  # inter-dc issues lol
         await event.edit(
             await event.get_input_chat(),
-            id=event.id,
+            
             no_webpage=not event.web_preview,
             message=event.raw_text,
             entities=event.entities
