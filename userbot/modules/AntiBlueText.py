@@ -24,4 +24,4 @@ async def handler(event):
             no_webpage=not event.web_preview,
             message=event.raw_text,
             entities=event.entities
-        ))
+        )
