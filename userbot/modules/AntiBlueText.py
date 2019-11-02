@@ -18,7 +18,7 @@ async def handler(event):
 
     if found:
         await asyncio.sleep(1)  # inter-dc issues lol
-        await client(functions.messages.EditMessageRequest(
+        await event.edit(
             await event.get_input_chat(),
             id=event.id,
             no_webpage=not event.web_preview,
