@@ -3,7 +3,7 @@ import asyncio
 from telethon import events
 from telethon.tl import types, functions
 
-@bot.on(events.NewMessage(outgoing=True))
+@register(outgoing=True)
 async def handler(event):
     found = False
     for i, ent in enumerate(event.entities or []):
@@ -14,7 +14,7 @@ async def handler(event):
 
     if found:
         await asyncio.sleep(1)  # inter-dc issues lol
-        await bot(functions.messages.EditMessageRequest(
+        await client(functions.messages.EditMessageRequest(
             await event.get_input_chat(),
             id=event.id,
             no_webpage=not event.web_preview,
