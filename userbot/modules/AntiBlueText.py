@@ -1,7 +1,8 @@
 import asyncio
 
 
-
+from userbot import CMD_HELP
+from userbot.events import register
 
 from telethon import events
 from telethon.tl import types, functions
