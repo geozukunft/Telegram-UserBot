@@ -1,0 +1,5 @@
+#!D:\Repos\Telegram-UserBot\env\Scripts\python.exe
+# encoding: utf-8
+
+from cowpy import cow
+cow.main()

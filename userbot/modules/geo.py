@@ -147,7 +147,7 @@ async def _(event):
             #mentions += f"[\u2063](tg://user?id={x.id})\n"
             # mentions += f"[@{x.username}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
-            await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
+            #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")
             mentions += f"[{x.first_name}](tg://user?id={x.id})\n"
             # mentions += f"@{x.username} "
             #await event.respond(f"[Hey, {x.first_name}!](tg://user?id={x.id})")

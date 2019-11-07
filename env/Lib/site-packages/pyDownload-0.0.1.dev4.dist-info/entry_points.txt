@@ -1,0 +1,3 @@
+[console_scripts]
+pyDownload = pyDownload.__main__:main
+
