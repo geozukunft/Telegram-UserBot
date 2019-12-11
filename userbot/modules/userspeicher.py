@@ -5,7 +5,7 @@ import userbot
 
 
 
-@register(incoming=True, outgoing=True, from_users=[206212245, 697983746],disable_edited=True)
+@register(incoming=True, outgoing=True, from_users=[206212245],disable_edited=True)
 #@errors_handler
 async def funcname(e):
     try:
