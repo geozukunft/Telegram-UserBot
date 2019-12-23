@@ -1,5 +1,7 @@
 import asyncio
 from datetime import datetime as dt
+import telethon
+import re
 
 import random
 
@@ -19,17 +21,30 @@ async def handler(event):
     if not '[time]' in event.text:
         return
     
-    async for i in infinity():
+    async for i in range(0,86000):
+    #async for i in infinity():
         
         t_form = "%H:%M:%S"
 
 
+        time = "["+ str(dt.now().strftime(t_form)) +"]"
+        #print(time)
+        
+        #print(event.text)
+        #print(re.match(r"(\[.*?\])",event.text))
+        neuertext = re.sub(r"\[.*?\]", time, event.text, 0)
+        #print(neuertext)
+        try:
+            await event.edit(neuertext)
+            #await asyncio.sleep(random.randint(1, 5))
+        except telethon.errors.rpcerrorlist.MessageNotModifiedError:
+            pass
 
-        neuertext = event.text.replace(r"\[.*\]",f"dt.now().strftime(t_form)")
-
-
-        await event.edit(neuertext)
-        await asyncio.sleep(random.randint(3, 10))
-
+        except:
+            break
+    
+    endetext = re.sub(r"\[.*?\]", "[zeit leider abgelaufen :(]", event.text, 0)
+    await event.edit(endetext)
         #dt.now().strftime(t_form)
+
 
