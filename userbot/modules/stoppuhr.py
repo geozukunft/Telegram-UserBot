@@ -36,7 +36,7 @@ async def handler(event):
         #print(neuertext)
         try:
             await event.edit(neuertext)
-            await asyncio.sleep(random.randint(10, 50))
+            await asyncio.sleep(random.randint(4, 20))
         except telethon.errors.rpcerrorlist.MessageNotModifiedError:
             pass
 
