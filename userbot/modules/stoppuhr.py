@@ -21,7 +21,7 @@ async def handler(event):
     if not '[time]' in event.text:
         return
     
-    async for i in range(0,86000):
+    async for i in range(0,8600):
     #async for i in infinity():
         
         t_form = "%H:%M:%S"
