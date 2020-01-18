@@ -1,11 +1,9 @@
 import asyncio
 
+from telethon.tl import types, functions
 
-from userbot import CMD_HELP
 from userbot.events import register
 
-from telethon import events
-from telethon.tl import types, functions
 
 @register(outgoing=True)
 async def handler(event):
@@ -18,12 +16,15 @@ async def handler(event):
 
     if found:
         await asyncio.sleep(1)  # inter-dc issues lol
-        await event.client(functions.messages.EditMessageRequest(
-            await event.get_input_chat(),
-            id=event.id,
-            no_webpage=not event.web_preview,
-            message=event.raw_text,
-            entities=event.entities
-        ))
+        try:
+            await event.client(functions.messages.EditMessageRequest(
+                await event.get_input_chat(),
+                id=event.id,
+                no_webpage=not event.web_preview,
+                message=event.raw_text,
+                entities=event.entities
+            ))
+        except:
+            pass
 
 
