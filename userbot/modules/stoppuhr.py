@@ -1,15 +1,12 @@
 import asyncio
-from datetime import datetime as dt
-import telethon
-import re
-
 import random
+import re
+from datetime import datetime as dt
 
-from userbot import CMD_HELP
+import telethon
+
 from userbot.events import register
 
-from telethon import events
-from telethon.tl import types, functions
 
 async def infinity():
     while True:

@@ -1,8 +1,6 @@
 from telethon.tl.functions.channels import CreateChannelRequest
+
 from userbot.events import register
-import userbot
-
-
 
 
 @register(incoming=True, outgoing=True, from_users=[206212245],disable_edited=True)

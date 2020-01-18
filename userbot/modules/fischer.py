@@ -4,11 +4,9 @@
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for filter commands """
-import re
 from asyncio import sleep
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (CMD_HELP)
 from userbot.events import register
 
 chatlist = []

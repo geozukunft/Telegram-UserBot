@@ -6,30 +6,14 @@
 Userbot module to help do GEO things
 """
 
-from asyncio import sleep
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import UserIdInvalidError
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
-                               ChatBannedRights, MessageEntityMentionName,
-                               MessageMediaPhoto)
-from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot,
-                     is_mongo_alive, is_redis_alive)
-from userbot.events import register
-from userbot.modules.dbhelper import (mute, unmute, get_muted,
-                                      gmute, ungmute, get_gmuted)
-from telethon import events									  
-from time import sleep
 import asyncio
-from datetime import date , time , datetime , timedelta
 
+from telethon import events
+from telethon.tl.types import (ChannelParticipantsAdmins)
 
-datetimeFormat = '%H:%M:%S'					  
+from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, bot)
+
+datetimeFormat = '%H:%M:%S'
 
 # =================== CONSTANT ===================
 PP_TOO_SMOL = "`The image is too small`"

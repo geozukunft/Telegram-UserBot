@@ -1,14 +1,12 @@
-from userbot import CMD_HELP
-from userbot.events import register
-from bwb import bwb
-
 import asyncio
-
+import os
 from asyncio import create_subprocess_shell as asyncrunapp
 from asyncio.subprocess import PIPE as asyncPIPE
 
-import os
+from bwb import bwb
 from dotenv import load_dotenv
+
+from userbot.events import register
 
 load_dotenv("config.env")
 

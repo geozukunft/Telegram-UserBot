@@ -2,18 +2,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from telethon import events
 from telethon.errors import MessageTooLongError
 
-from time import sleep
-
-from telethon import events
-from telethon.errors import BadRequestError
-from telethon.errors.rpcerrorlist import UserIdInvalidError
-from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
-
-from telethon.tl.types import ChatAdminRights, ChatBannedRights
-
 from userbot import (bot)
+
 
 @bot.on(events.NewMessage(pattern=r"\.json", outgoing=True))
 async def _(event):

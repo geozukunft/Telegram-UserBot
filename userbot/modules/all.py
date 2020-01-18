@@ -4,21 +4,10 @@
 
 #TODO Support specifying the message content. The subsequent mentions should just reply to this message and have a ☝🏻 emoji.
 
-from time import sleep
-
 from telethon import events
-from telethon.errors import BadRequestError
-from telethon.errors.rpcerrorlist import UserIdInvalidError
-from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.types import ChatAdminRights, ChatBannedRights
-
 
 from userbot import (bot)
-
-
-
-
 
 
 @bot.on(events.NewMessage(pattern=r"(?i)^\.all(IDs)?$", outgoing=True))

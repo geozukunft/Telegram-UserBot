@@ -9,8 +9,7 @@ import time
 
 from telethon.events import StopPropagation
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, COUNT_MSG, USERS,
-                     is_redis_alive)
+from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, is_redis_alive)
 from userbot.events import register
 from userbot.modules.dbhelper import afk, afk_reason, is_afk, no_afk
 
