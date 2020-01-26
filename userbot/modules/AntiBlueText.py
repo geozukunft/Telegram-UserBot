@@ -12,7 +12,7 @@ async def handler(event):
         if isinstance(ent, types.MessageEntityBotCommand):
             found = True
             event.entities[i] = types.MessageEntityTextUrl(
-                ent.offset, ent.length, 'tg://need_update_for_some_feature')
+                ent.offset+1, ent.length, 'tg://need_update_for_some_feature')
 
     if found:
         await asyncio.sleep(1)  # inter-dc issues lol
@@ -21,7 +21,7 @@ async def handler(event):
                 await event.get_input_chat(),
                 id=event.id,
                 no_webpage=not event.web_preview,
-                message=event.raw_text,
+                message="."+event.raw_text,
                 entities=event.entities
             ))
         except:
