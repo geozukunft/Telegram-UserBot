@@ -10,7 +10,7 @@ from userbot.events import register
 
 load_dotenv("config.env")
 
-TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID2", 358491576)
+TELEGRAM_ID_STRING = os.environ.get("TELEGRAM_ID", 358491576)
 print(TELEGRAM_ID_STRING)
 TELEGRAM_ID = int(TELEGRAM_ID_STRING)
 print(TELEGRAM_ID)
