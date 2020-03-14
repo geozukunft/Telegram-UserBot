@@ -4,11 +4,9 @@
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for filter commands """
-import re
 from asyncio import sleep
 
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (CMD_HELP)
 from userbot.events import register
 
 chatlist = []
@@ -32,9 +30,23 @@ async def startfischer(handler):
 
 
 
+@register(outgoing=True, pattern="^\.stopfisch")
+async def startfischer(handler):
+    global chatlist
+    chatlist.remove(handler.chat_id)
+    await handler.edit("sollte getan sein")
+
+
+@register(outgoing=True, pattern="^\.notstopp")
+async def startfischer(handler):
+    global chatlist
+    chatlist.clear()
+    await handler.edit("sollte getan sein")
 
 
 
 CMD_HELP.update({
-    "startfisch":" Startet Fisching"
+    "startfisch":" Startet Fisching",
+    "stopfisch":"Stoppt fisching im chat",
+    "notstop":"stoppt fisching in allen chats"
 })

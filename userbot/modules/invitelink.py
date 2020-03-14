@@ -1,30 +1,6 @@
-
-import re
-from asyncio import sleep
-
-from telethon.errors import (BadRequestError, ChatAdminRequiredError,
-                             ImageProcessFailedError, PhotoCropSizeSmallError,
-                             UserAdminInvalidError)
-from telethon.errors.rpcerrorlist import UserIdInvalidError
-from telethon.tl.functions.channels import (EditAdminRequest,
-                                            EditBannedRequest,
-                                            EditPhotoRequest)
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
-from telethon.tl.types import (ChannelParticipantsAdmins, ChatAdminRights,
-                               ChatBannedRights, MessageEntityMentionName,
-                               MessageMediaPhoto)
-
-from userbot import (BOTLOG, BOTLOG_CHATID, CMD_HELP, bot,
-                     is_mongo_alive, is_redis_alive)
+from userbot import (CMD_HELP)
 from userbot.events import register
-from userbot.modules.dbhelper import (get_gmuted, get_muted, gmute, mute,
-                                      ungmute, unmute)
 from userbot.utils import helpers
-from userbot.utils.mdtex import Bold, Code, KeyValueItem, MDTeXDocument, Section
-
-
-
-
 
 
 @register(outgoing=True, pattern="^\.i(nvite)?l(ink)?")
